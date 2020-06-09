@@ -33,11 +33,14 @@ class Lexer:
 
 	# Skip comments in the code
 	def skipComment(self):
-		pass
+		if self.curChar == '#':
+			while self.curChar != '\n':
+				self.nextChar()
 
 	# Return the next token
 	def getToken(self):
 		self.skipWhitespace()
+		self.skipComment()
 		token = None
 
 		# Check the first character of this token to see if we can decide what it is
