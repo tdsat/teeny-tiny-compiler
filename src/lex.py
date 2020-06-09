@@ -77,6 +77,21 @@ class Lexer:
 				token = Token('!=', TokenType.NOTEQ)
 			else:
 				self.abort('Expected !=, got !' + self.peek())
+		elif self.curChar == '\"':
+			self.nextChar()
+			startPos = self.curPos
+
+			while self.curChar != '\"':
+				# Do not allow special characters in the string.
+				# No escape characters, newlines, tabs or %
+				# We will be using C's printf on this string
+				if self.curChar in ['\\','\n','\t','%']:
+					self.abort('Invalid string character :' + self.curChar)
+				self.nextChar()
+			
+			tokText = self.source[startPos : self.curPos]
+			token = Token(tokText, TokenType.STRING)
+			
 		elif self.curChar == '\n':
 			token = Token(self.curChar, TokenType.NEWLINE)
 		elif self.curChar == '\0':
