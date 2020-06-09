@@ -50,6 +50,30 @@ class Lexer:
 			token = Token(self.curChar, TokenType.ASTERISK)
 		elif self.curChar == '/':
 			token = Token(self.curChar, TokenType.SLASH)
+		elif self.curChar == '=':
+			if self.peek() == '=':
+				self.nextChar()
+				token = Token('=' + self.curChar, TokenType.EQEQ)
+			else:
+				token = Token(self.curChar, TokenType.EQ)
+		elif self.curChar == '<':
+			if self.peek() == '=':
+				self.nextChar()
+				token = Token('<' + self.curChar, TokenType.LTEQ)
+			else:
+				token = Token(self.curChar, TokenType.LT)
+		elif self.curChar == '>':
+			if self.peek() == '=':
+				self.nextChar()
+				token = Token('>' + self.curChar, TokenType.GTEQ)
+			else:
+				token = Token(self.curChar, TokenType.GT)
+		elif self.curChar == '!':
+			if self.peek() == '=':
+				self.nextChar()
+				token = Token('!=', TokenType.NOTEQ)
+			else:
+				self.abort('Expected !=, got !' + self.peek())
 		elif self.curChar == '\n':
 			token = Token(self.curChar, TokenType.NEWLINE)
 		elif self.curChar == '\0':
