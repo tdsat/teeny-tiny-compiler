@@ -108,6 +108,19 @@ class Lexer:
 					self.nextChar()
 			
 			token = Token(self.source[startPos: self.curPos],TokenType.NUMBER)
+		
+		elif self.curChar.isalpha():
+
+			startPos = self.curPos
+			while self.peek().isalnum():
+				self.nextChar()
+			
+			tokenText = self.source[startPos : self.curPos + 1]
+			keyword = Token.checkIfKeyword(tokenText)
+			if keyword == None:
+				token = Token(tokenText, TokenType.IDENT)
+			else:
+				token = Token(tokenText,keyword)
 
 		elif self.curChar == '\n':
 			token = Token(self.curChar, TokenType.NEWLINE)
@@ -124,6 +137,13 @@ class Token:
 	def __init__(self,tokenText,tokenKind):
 		self.text = tokenText # The token's actual text. Used for identifiers, strings and numbers
 		self.kind = tokenKind # The TokenType that this token is classified as
+
+	@staticmethod
+	def checkIfKeyword(tokenText):
+		for kind in TokenType:
+			if kind.name == tokenText and kind.value >= 100 and kind.value <= 200:
+				return kind
+		return None
 
 # TokenType is our enum for all the types of token
 class TokenType(enum.Enum):
