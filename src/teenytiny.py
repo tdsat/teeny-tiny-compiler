@@ -1,16 +1,23 @@
 
 from lex import *
+from parse import *
+import sys
 
 def main():
-	input = "+- */ >>= = != THEN NOTHING TO SEE HERE WHILE #hello\n != \"This is a string !\" 2433444444"
+	print("Teeny tiny compiler")
+
+	if len(sys.argv) != 2:
+		sys.exit("Error: Compiler needs source file as argument")
+	with open(sys.argv[1],'r') as inputFile:
+		input = inputFile.read()
+
+	# Initialize lexer and parser
 	lexer = Lexer(input)
+	parser = Parser(lexer)
 
-	token = lexer.getToken()
+	parser.program() # Start the parser
 
-	while token.kind != TokenType.EOF:
-		print(token.kind)
-		token = lexer.getToken()
-
+	print('Parsing completed')
 
 
 main()
