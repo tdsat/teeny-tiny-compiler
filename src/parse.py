@@ -76,7 +76,43 @@ class Parser:
 				self.statement()
 			
 			self.match(TokenType.ENDIF)
+		elif self.checkToken(TokenType.WHILE): # "WHILE" comparison "REPEAT" nl {statement nl} "ENDWHILE" nl
+			print("STATEMENT-WHILE")
+			self.nextToken()
+			self.comparison()
 
+			self.match(TokenType.REPEAT)
+			self.nl()
+
+			while not self.checkToken(TokenType.ENDWHILE):
+				self.statement()
+				self.match(TokenType.ENDWHILE)
+
+		elif self.checkToken(TokenType.LABEL):	# "LABEL" ident nl
+			print("STATEMENT-LABEL")
+			self.nextToken()
+			self.match(TokenType.IDENT)
+			
+		elif self.checkToken(TokenType.GOTO):	# "GOTO" ident nl
+			print("STATEMENT-GOTO")
+			self.nextToken()
+			self.match(TokenType.IDENT)
+
+		elif self.checkToken(TokenType.LET):	# "LET" ident "=" expression nl
+			print("STATEMENT-LET")
+			self.nextToken()
+			self.match(TokenType.IDENT)
+			self.match(TokenType.EQ)
+			self.expression()
+
+		elif self.checkToken(TokenType.INPUT):	# "INPUT" ident nl
+			print("STATEMENT-INPUT")
+			self.nextToken()
+			self.match(TokenType.IDENT)
+
+		# Not a valid statement. Error!
+		else:
+			self.abort("Invalid statement at " + self.curToken.text + " (" + self.curToken.kind.name + ")")
 		# Newline
 		self.nl()
 
