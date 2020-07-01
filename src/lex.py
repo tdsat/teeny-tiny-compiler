@@ -1,6 +1,6 @@
 import enum
 import sys
-from token import *
+from tinytoken import *
 
 class Lexer:
 	def __init__(self, input):

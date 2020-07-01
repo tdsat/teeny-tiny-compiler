@@ -1,6 +1,6 @@
 
-from lex import *
-from parse import *
+from lex import Lexer
+from parse import Parser
 import sys
 
 def main():
