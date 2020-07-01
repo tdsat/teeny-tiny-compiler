@@ -120,6 +120,63 @@ class Parser:
 		# Newline
 		self.nl()
 
+
+	 # comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
+	def comparison(self):
+		print("COMPARISON")
+		self.expression()
+
+		# Must be at least one comparisson operator and another expression
+		if self.isComparisonOperator():
+			self.nextToken()
+			self.expression()
+		
+		while self.isComparisonOperator():
+			self.nextToken()
+			self.expression()
+
+	def isComparisonOperator(self):
+		return self.curToken.kind in [TokenType.GT, TokenType.GTEQ, TokenType.LT, TokenType.LTEQ, TokenType.EQEQ, TokenType.NOTEQ]
+
+ 	# expression ::= term {( "-" | "+" ) term}
+	def expression(self):
+		print("EXPRESSION")
+		self.term()
+
+		while self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
+			self.nextToken()
+			self.term()
+	
+	# term ::= unary {( "/" | "*" ) unary}
+	def term(self):
+		print("TERM")
+		self.unary()
+
+		# Can have 0 or more * OR / and expressions
+		while self.checkToken(TokenType.SLASH) or self.checkToken(TokenType.ASTERISK):
+			self.nextToken()
+			self.unary()
+
+	# unary ::= ["+" | "-"] primary
+	def unary(self):
+		print("UNARY")
+
+		# Optional unary + OR -
+		if self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
+			self.nextToken()
+		self.primary()
+		
+	 # primary ::= number | ident
+	def primary(self):
+		print("PRIMARY (" + self.curToken.text + ")")
+
+		if self.checkToken(TokenType.NUMBER):
+			self.nextToken()
+		elif self.checkToken(TokenType.IDENT):
+			self.nextToken()
+		else:
+			self.abort("Invalid token at " + self.curToken.text)
+
 	# nl ::= '\n' +
 	def nl(self):
 		print ("NEWLINE")

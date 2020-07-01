@@ -108,7 +108,7 @@ class Lexer:
 				while self.peek().isdigit():
 					self.nextChar()
 			
-			token = Token(self.source[startPos: self.curPos],TokenType.NUMBER)
+			token = Token(self.source[startPos: self.curPos + 1],TokenType.NUMBER)
 		
 		elif self.curChar.isalpha():
 
