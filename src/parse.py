@@ -62,6 +62,20 @@ class Parser:
 			else:
 				# Expect an expression
 				self.expression()
+		elif self.checkToken(TokenType.IF): # "IF" comparison "THEN" nl {statement} "ENDIF" nl
+			print("STATEMENT-IF")
+			self.nextToken()
+			self.comparison()
+
+			self.match(TokenType.THEN)
+			self.nl()
+
+			# Zero or more statements in the body
+
+			while not self.checkToken(TokenType.ENDIF):
+				self.statement()
+			
+			self.match(TokenType.ENDIF)
 
 		# Newline
 		self.nl()
@@ -69,7 +83,7 @@ class Parser:
 	# nl ::= '\n' +
 	def nl(self):
 		print ("NEWLINE")
-		
+
 		# Require at least on newline
 		self.match(TokenType.NEWLINE)
 		# But we will allow extra newlines too, of course
